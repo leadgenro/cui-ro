@@ -13,17 +13,26 @@ license-files = ["LICENSE"]
 authors = [{ name = "Adrian Oaida" }]
 keywords = ["cui", "cif", "romania", "vat", "validation", "fiscal-code", "onrc", "anaf"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "Topic :: Office/Business :: Financial",
-    "Natural Language :: Romanian",
     "Natural Language :: English",
+    "Natural Language :: Romanian",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial",
+    "Typing :: Typed",
 ]
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/leadgenro/cui-ro"
+Homepage = "https://leadgen.adrianhomelab.com/?src=cui-ro"
+Repository = "https://github.com/leadgenro/cui-ro"
 Issues = "https://github.com/leadgenro/cui-ro/issues"
 
 [tool.setuptools]

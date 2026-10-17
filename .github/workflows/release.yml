@@ -1,0 +1,114 @@
+name: release
+
+# Publishes cui-ro to PyPI and npm when a GitHub Release is published.
+#
+# PyPI: Trusted Publishing (GitHub OIDC), no token. The trusted publisher is
+#   this repository, this workflow file (release.yml) and the environment "pypi".
+# npm: trusted publishing (OIDC) once the package exists on npm. npm cannot set
+#   a trusted publisher before a package's first publish, so the FIRST release
+#   uses a short-lived granular token stored as the repository secret NPM_TOKEN.
+#   After that release, add the trusted publisher on npmjs.com and delete the
+#   secret: the npm CLI tries OIDC first and only falls back to NODE_AUTH_TOKEN,
+#   which is then empty.
+#
+# The tag must be vX.Y.Z and match the version in pyproject.toml, package.json
+# and the Python package's __version__, or nothing is built and nothing is published.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build and check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.21.0"
+      - name: Release tag matches the package version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: python scripts/check_release_version.py "$TAG"
+      - name: Unit tests
+        run: |
+          python -m unittest discover -s python/tests
+          npm test
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install build==1.6.1 twine==7.0.0
+          python -m build
+          python -m twine check --strict dist/*
+          ls -l dist
+      - name: npm pack (dry run)
+        run: npm pack --dry-run
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: python-dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  pypi:
+    name: publish to PyPI
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/project/cui-ro/
+    permissions:
+      contents: read
+      id-token: write # Trusted Publishing: the OIDC token is the only credential
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: python-dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+  npm:
+    name: publish to npm
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/cui-ro
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing and provenance
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.21.0" # bundles npm 11.19.0; trusted publishing needs npm 11.5.1+
+          registry-url: "https://registry.npmjs.org"
+      - name: npm is new enough for trusted publishing
+        run: |
+          npm --version
+          node -e 'const [a,b,c]=process.argv[1].split(".").map(Number); process.exit(a>11||(a===11&&(b>5||(b===5&&c>=1)))?0:1)' "$(npm --version)"
+      - name: Release tag matches the package version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: python3 scripts/check_release_version.py "$TAG"
+      - name: npm publish
+        run: npm publish --provenance --access public
+        env:
+          # Only for the first release. Once the trusted publisher is set on
+          # npmjs.com, delete the NPM_TOKEN secret: this is then empty and npm
+          # authenticates with OIDC.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

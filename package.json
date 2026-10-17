@@ -28,13 +28,27 @@
   "engines": {
     "node": ">=18"
   },
-  "keywords": ["cui", "cif", "romania", "vat", "validation", "fiscal-code", "onrc", "anaf"],
+  "keywords": [
+    "cui",
+    "cif",
+    "romania",
+    "vat",
+    "validation",
+    "fiscal-code",
+    "onrc",
+    "anaf"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leadgenro/cui-ro.git"
   },
-  "homepage": "https://github.com/leadgenro/cui-ro#readme",
-  "bugs": "https://github.com/leadgenro/cui-ro/issues",
-  "author": "Adrian Oaida"
+  "homepage": "https://leadgen.adrianhomelab.com/?src=cui-ro",
+  "bugs": {
+    "url": "https://github.com/leadgenro/cui-ro/issues"
+  },
+  "author": "Adrian Oaida",
+  "publishConfig": {
+    "access": "public"
+  }
 }
