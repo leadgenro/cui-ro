@@ -1,0 +1,40 @@
+{
+  "name": "cui-ro",
+  "version": "1.0.0",
+  "description": "Romanian CUI / CIF validation with the official control digit: isValid, normalize, checkDigit, formatVat. Zero dependencies.",
+  "type": "module",
+  "main": "./js/index.js",
+  "types": "./js/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./js/index.d.ts",
+      "default": "./js/index.js"
+    },
+    "./leadgen": {
+      "types": "./js/leadgen.d.ts",
+      "default": "./js/leadgen.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "js/index.js",
+    "js/index.d.ts",
+    "js/leadgen.js",
+    "js/leadgen.d.ts"
+  ],
+  "scripts": {
+    "test": "node --test js/test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["cui", "cif", "romania", "vat", "validation", "fiscal-code", "onrc", "anaf"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leadgenro/cui-ro.git"
+  },
+  "homepage": "https://github.com/leadgenro/cui-ro#readme",
+  "bugs": "https://github.com/leadgenro/cui-ro/issues",
+  "author": "Adrian Oaida"
+}
