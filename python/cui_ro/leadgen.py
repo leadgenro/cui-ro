@@ -9,7 +9,7 @@ touches the network, and nothing here runs unless you call ``lookup``.
         print(firm["cui"], firm["companyName"])
 
 Free limits (https://leadgen.adrianhomelab.com/docs): 5 lookups a day per IP
-without a key, 25 a day with a free key from https://leadgen.adrianhomelab.com/start;
+without a key, 50 a day with a free key from https://leadgen-api.adrianhomelab.com/en/start;
 the day resets at 00:00 UTC. The CUI is checked locally first, so an invalid
 one never spends a lookup.
 """

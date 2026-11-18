@@ -93,7 +93,7 @@ If you already use [python-stdnum](https://pypi.org/project/python-stdnum/), its
 
 ## Optional: look the firm up
 
-To get the firm's registry record, financials and ANAF status from its CUI, a separate module calls the public REST API of [Leadgen](https://leadgen.adrianhomelab.com), a Romanian company-data API and MCP server: `GET /lookup_business?query=<cui>`. Importing the validator never loads this module and never touches the network. The CUI is checked locally first, so an invalid one is never sent. The free limits are 5 lookups a day per IP without a key and 25 a day with a free key from leadgen.adrianhomelab.com/start. The day resets at 00:00 UTC (see leadgen.adrianhomelab.com/docs).
+To get the firm's registry record, financials and ANAF status from its CUI, a separate module calls the public REST API of [Leadgen](https://leadgen.adrianhomelab.com), a Romanian company-data API and MCP server: `GET /lookup_business?query=<cui>`. Importing the validator never loads this module and never touches the network. The CUI is checked locally first, so an invalid one is never sent. The free limits are 5 lookups a day per IP without a key and 50 a day with a free key from leadgen-api.adrianhomelab.com/en/start. The day resets at 00:00 UTC (see leadgen-api.adrianhomelab.com/en/docs).
 
 ```python
 from cui_ro.leadgen import lookup, LeadgenError

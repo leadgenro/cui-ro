@@ -1,7 +1,7 @@
 // Optional: look a CUI up in Leadgen's public REST API (registry record, ANAF status).
 // Separate from the validator on purpose: importing "cui-ro" never touches the network.
 // Free limits (https://leadgen.adrianhomelab.com/docs): 5 lookups a day per IP without a key,
-// 25 a day with a free key from https://leadgen.adrianhomelab.com/start; resets 00:00 UTC.
+// 50 a day with a free key from https://leadgen-api.adrianhomelab.com/en/start; resets 00:00 UTC.
 // The CUI is checked locally first, so an invalid one never spends a lookup.
 import { isValid, normalize } from "./index.js";
 
